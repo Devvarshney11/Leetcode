@@ -46,7 +46,7 @@ int minSubArrayLen(int target, vector<int> nums)
     while (right < n)
     {
         sum += nums[right];
-        if (sum >= target)
+        while(sum >= target)
         {
             count = min(count, right - left + 1);
             sum -= nums[left];
