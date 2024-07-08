@@ -4,47 +4,56 @@
 
 using namespace std;
 
-int calculate(string s)
-{
-    stack<pair<int, int>> st;
-
-    int i = 0;
-    int n = s.length();
-    int sum = 0;
-    int sign = +1;
-    for (int i = 0; i < n; i++)
-    {
-        if (isdigit(s[i]))
+int calculate(string s) {
+        int n = s.length();
+        stack<int> st;
+        int currChar = '+';
+        for(int i = 0;i<n;i++)
         {
-            int digit = 0;
-            while (i < n && isdigit(s[i]))
+            if(isdigit(s[i]))
             {
-                digit = digit * 10 + (s[i] - '0');
-                i++;
+                int curr = 0;
+                while(i<n && isdigit(s[i]))
+                {
+                    curr = curr*10+(s[i]-'0');
+                    i++;
+                }  
+                i--;
+                
+                if(currChar == '+')
+                {
+                    st.push(curr);
+                }
+                else if(currChar == '-')
+                {
+                    st.push(-curr);
+                }
+                else if(currChar == '*')
+                {
+                    int a = st.top();
+                    st.pop();
+                    st.push(a*curr);
+                }
+                else if(currChar == '/')
+                {
+                    int a = st.top();
+                    st.pop();
+                    st.push(a/curr);
+                }
             }
-            i--;
-            sum += digit * sign;
-            sign = +1;
+            else if(s[i] != ' ')
+            {
+                currChar = s[i];
+            }
         }
-        else if (s[i] == '(')
+        int sum = 0;
+        while(!st.empty())
         {
-            st.push({sum, sign});
-            sum = 0;
-            sign = +1;
-        }
-        else if (s[i] == ')')
-        {
-            sum = st.top().first + st.top().second * sum;
+            sum += st.top();
             st.pop();
         }
-        else if (s[i] == '-')
-        {
-            sign = -1 * sign;
-        }
+        return sum;
     }
-    return sum;
-}
-
 int main()
 {
     return 0;
